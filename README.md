@@ -4,3 +4,4 @@ SO MATCHES LIKE A*B  A*B|C (A|B)*B ETC
 WHAT IT DOES...
 REGEX-> PREFIX -> NFA
 WE DO BFS ON NFA GRAPH AND CHECK IF THE FINAL SET OF NODES HAS FINAL STATE OR NOT
+<img width="1459" height="608" alt="image" src="https://github.com/user-attachments/assets/948ddf5a-3039-4fcd-807e-30a1dd18d6b8" />
