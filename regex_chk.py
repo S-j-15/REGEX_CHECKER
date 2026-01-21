@@ -94,46 +94,27 @@ def make_NFA(reg):
 #keep track of leaf
 #fix c=="." case in NFA
 #implement bfs based regex matcher
-def eval_NFA(NFA,start,end,str):
-  q=deque()
-  i=0
-  n=len(str)
-  q.append(start)
-  q.append(None)
-  nxt=set()
-  addit=0
-  allnxt=list()
-  while(len(q)>=1):
-    state=q.popleft()
-    if state==None:
-      i+=addit
-      if i>=n:
-        if len(nxt.intersection(end))!=0:
-          return True
-        else:
-          return False
-      if addit==0:
-        for ass in allnxt:
-          if ass==nxt:
+def eval_NFA(NFA, start, end, string):
+    def epsilon_closure(states):
+        stack = list(states)
+        closure = set(states)
+        while stack:
+            s = stack.pop()
+            for nxt in NFA[(s, "eps")]:
+                if nxt not in closure:
+                    closure.add(nxt)
+                    stack.append(nxt)
+        return closure
+    current = epsilon_closure({start})
+    for ch in string:
+        next_states = set()
+        for s in current:
+            next_states.update(NFA[(s, ch)])
+        if not next_states:
             return False
-        allnxt.append(nxt)
-      else:
-        allnxt=list()
-      nxt=set()
-      addit=0
-      q.append(None)
-    for st in NFA[(state,"eps")]:
-      if st not in nxt:
-        nxt.add(st)
-        q.append(st)
-    nl=len(NFA[(state,str[i])])
-    if nl>0:
-      addit=1
-    for st in NFA[(state,str[i])]:
-      if st not in nxt:
-        nxt.add(st)
-        q.append(st)
-  return False  
+        current = epsilon_closure(next_states)
+    return len(current.intersection(end)) > 0
+
     
 
 reg=input("ENTER REGEX:")
